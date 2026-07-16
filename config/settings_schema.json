@@ -137,5 +137,46 @@
         "default": "#5B6664"
       }
     ]
+  },
+  {
+    "name": "Carrito",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Envío gratis"
+      },
+      {
+        "type": "number",
+        "id": "free_shipping_threshold",
+        "label": "Umbral de envío gratis",
+        "info": "Monto en la moneda de la tienda. La barra de progreso del carrito se calcula sobre el subtotal real. Déjalo vacío o en 0 para ocultar la barra."
+      },
+      {
+        "type": "header",
+        "content": "Garantías en el carrito"
+      },
+      {
+        "type": "paragraph",
+        "content": "Se muestran justo antes del botón de checkout para reducir el abandono."
+      },
+      {
+        "type": "text",
+        "id": "cart_guarantee_1",
+        "label": "Garantía 1",
+        "default": "Devoluciones sin complicaciones en 30 días"
+      },
+      {
+        "type": "text",
+        "id": "cart_guarantee_2",
+        "label": "Garantía 2",
+        "default": "Pago 100% seguro"
+      },
+      {
+        "type": "text",
+        "id": "cart_guarantee_3",
+        "label": "Garantía 3",
+        "default": "Pago contraentrega disponible"
+      }
+    ]
   }
 ]

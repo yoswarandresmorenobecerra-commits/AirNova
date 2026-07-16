@@ -20,7 +20,12 @@
       "color_border": "#E3E7E6",
 
       "color_text": "#1E2523",
-      "color_text_secondary": "#5B6664"
+      "color_text_secondary": "#5B6664",
+
+      "free_shipping_threshold": 150000,
+      "cart_guarantee_1": "Devoluciones sin complicaciones en 30 días",
+      "cart_guarantee_2": "Pago 100% seguro",
+      "cart_guarantee_3": "Pago contraentrega disponible"
     }
   }
 }

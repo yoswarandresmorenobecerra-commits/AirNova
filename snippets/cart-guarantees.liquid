@@ -1,0 +1,25 @@
+{%- comment -%}
+  Resumen de garantías justo antes del botón de checkout.
+  Se leen de los theme settings globales (Carrito) para que el mensaje
+  sea consistente entre el drawer y la página de carrito.
+{%- endcomment -%}
+<ul class="cart-guarantees">
+  {%- if settings.cart_guarantee_1 != blank -%}
+    <li class="cart-guarantees__item">
+      {% render 'icon', name: 'returns' %}
+      <span>{{ settings.cart_guarantee_1 }}</span>
+    </li>
+  {%- endif -%}
+  {%- if settings.cart_guarantee_2 != blank -%}
+    <li class="cart-guarantees__item">
+      {% render 'icon', name: 'guarantee' %}
+      <span>{{ settings.cart_guarantee_2 }}</span>
+    </li>
+  {%- endif -%}
+  {%- if settings.cart_guarantee_3 != blank -%}
+    <li class="cart-guarantees__item">
+      {% render 'icon', name: 'cod' %}
+      <span>{{ settings.cart_guarantee_3 }}</span>
+    </li>
+  {%- endif -%}
+</ul>

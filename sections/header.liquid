@@ -3,11 +3,11 @@
     {{ section.settings.logo_text | default: shop.name }}
   </a>
 
-  <a href="{{ routes.cart_url }}" class="site-header__cart" aria-label="Carrito">
+  <a href="{{ routes.cart_url }}" class="site-header__cart" aria-label="Carrito" data-cart-drawer-open>
     {% render 'icon', name: 'cart' %}
-    {%- if cart.item_count > 0 -%}
-      <span class="site-header__cart-count">{{ cart.item_count }}</span>
-    {%- endif -%}
+    <span class="site-header__cart-count" data-cart-count {% if cart.item_count == 0 %}hidden{% endif %}>
+      {{- cart.item_count -}}
+    </span>
   </a>
 </header>
 

@@ -1,0 +1,28 @@
+<section class="cart-page">
+  <h1 class="cart-page__heading">Tu carrito</h1>
+
+  <div class="cart-page__body" data-cart-section="{{ section.id }}">
+    {% render 'cart-content' %}
+  </div>
+</section>
+
+{% style %}
+  .cart-page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 1.5rem 1.25rem 3rem;
+  }
+
+  .cart-page__heading {
+    font-size: 1.5rem;
+    color: var(--color-text);
+    margin: 0 0 1.25rem;
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "Página de carrito",
+  "settings": []
+}
+{% endschema %}
