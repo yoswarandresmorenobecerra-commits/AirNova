@@ -1,0 +1,204 @@
+{%- liquid
+  assign product = section.settings.product
+-%}
+
+{%- if product != blank -%}
+  {%- assign variant = product.selected_or_first_available_variant -%}
+
+  <section class="featured-product">
+    <div class="featured-product__media">
+      {%- if product.featured_image != blank -%}
+        {{ product.featured_image | image_url: width: 1200 | image_tag:
+          loading: 'lazy',
+          widths: '400,600,900,1200',
+          sizes: '100vw',
+          alt: product.featured_image.alt | default: product.title,
+          class: 'featured-product__image'
+        }}
+      {%- endif -%}
+    </div>
+
+    <div class="featured-product__content">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="featured-product__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+
+      <h2 class="featured-product__title">{{ product.title }}</h2>
+
+      {%- if section.settings.benefit_sentence != blank -%}
+        <p class="featured-product__benefit">{{ section.settings.benefit_sentence }}</p>
+      {%- endif -%}
+
+      <p class="featured-product__price">
+        {{ variant.price | money }}
+        {%- if variant.compare_at_price > variant.price -%}
+          <s class="featured-product__price-compare">{{ variant.compare_at_price | money }}</s>
+        {%- endif -%}
+      </p>
+
+      {%- comment -%}
+        Stock real vía Liquid: solo se muestra si Shopify realmente
+        controla el inventario de esta variante. Nunca se inventa un número.
+      {%- endcomment -%}
+      {%- if variant.inventory_management == 'shopify' and variant.inventory_quantity > 0 and variant.inventory_quantity <= section.settings.low_stock_threshold -%}
+        <span class="badge--urgency featured-product__stock">
+          Quedan {{ variant.inventory_quantity }} unidades
+        </span>
+      {%- endif -%}
+
+      {%- form 'product', product, class: 'featured-product__form' -%}
+        <input type="hidden" name="id" value="{{ variant.id }}">
+
+        <button
+          type="submit"
+          name="add"
+          class="btn btn--primary btn--full"
+          {% unless variant.available %}disabled{% endunless %}
+        >
+          {%- if variant.available -%}
+            {{ section.settings.button_label | default: 'Añadir al carrito' }}
+          {%- else -%}
+            Agotado
+          {%- endif -%}
+        </button>
+      {%- endform -%}
+
+      <a href="{{ product.url }}" class="btn btn--secondary btn--full featured-product__link">
+        Ver detalles
+      </a>
+    </div>
+  </section>
+{%- endif -%}
+
+{% style %}
+  .featured-product {
+    display: flex;
+    flex-direction: column;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1.5rem 1.25rem;
+    gap: 1.25rem;
+  }
+
+  .featured-product__media {
+    aspect-ratio: 1 / 1;
+    background: var(--color-surface-alt);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .featured-product__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .featured-product__eyebrow {
+    color: var(--color-primary);
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin: 0 0 0.4rem;
+  }
+
+  .featured-product__title {
+    margin: 0 0 0.5rem;
+    font-size: 1.5rem;
+    color: var(--color-text);
+  }
+
+  .featured-product__benefit {
+    margin: 0 0 1rem;
+    color: var(--color-text-secondary);
+    font-size: 1.05rem;
+    line-height: 1.5;
+  }
+
+  .featured-product__price {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0 0 0.5rem;
+  }
+
+  .featured-product__price-compare {
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--color-text-secondary);
+    margin-left: 0.5rem;
+  }
+
+  .featured-product__stock {
+    margin-bottom: 1rem;
+  }
+
+  .featured-product__form {
+    margin: 0 0 0.75rem;
+  }
+
+  @media (min-width: 750px) {
+    .featured-product {
+      flex-direction: row;
+      align-items: center;
+      padding: 3rem 2rem;
+    }
+
+    .featured-product__media,
+    .featured-product__content {
+      flex: 1 1 50%;
+    }
+
+    .featured-product__form,
+    .featured-product__link {
+      max-width: 320px;
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "Producto destacado",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Producto"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Texto superior (opcional)",
+      "default": "Más vendido"
+    },
+    {
+      "type": "textarea",
+      "id": "benefit_sentence",
+      "label": "Beneficio principal (una frase)",
+      "default": "Libera la tensión de espalda y cuello en menos de 10 minutos al día."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Texto del botón de acción",
+      "default": "Añadir al carrito"
+    },
+    {
+      "type": "range",
+      "id": "low_stock_threshold",
+      "label": "Umbral de stock bajo",
+      "info": "El aviso de pocas unidades solo aparece si el inventario real de Shopify está por debajo de este número.",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "default": 10
+    }
+  ],
+  "presets": [
+    {
+      "name": "Producto destacado"
+    }
+  ]
+}
+{% endschema %}

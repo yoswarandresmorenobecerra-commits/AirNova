@@ -1,0 +1,97 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "eyebrow": "Postura · Movilidad · Recuperación",
+        "heading": "Alivia el dolor de espalda y recupera tu movilidad, 15 minutos al día",
+        "subheading": "Herramientas de recuperación y corrección postural diseñadas para quienes pasan el día sentados o entrenando.",
+        "button_label": "Comprar ahora",
+        "button_link": "/collections/all"
+      }
+    },
+    "trust_bar": {
+      "type": "trust-bar",
+      "blocks": {
+        "shipping": {
+          "type": "item",
+          "settings": {
+            "icon": "shipping",
+            "text": "Envío a toda Colombia"
+          }
+        },
+        "cod": {
+          "type": "item",
+          "settings": {
+            "icon": "cod",
+            "text": "Pago contraentrega"
+          }
+        },
+        "guarantee": {
+          "type": "item",
+          "settings": {
+            "icon": "guarantee",
+            "text": "Garantía de 30 días"
+          }
+        }
+      },
+      "block_order": ["shipping", "cod", "guarantee"]
+    },
+    "featured_product": {
+      "type": "featured-product",
+      "settings": {
+        "eyebrow": "Más vendido",
+        "benefit_sentence": "Libera la tensión de espalda y cuello en menos de 10 minutos al día.",
+        "button_label": "Añadir al carrito",
+        "low_stock_threshold": 10
+      }
+    },
+    "how_it_works": {
+      "type": "how-it-works",
+      "settings": {
+        "heading": "Cómo funciona"
+      },
+      "blocks": {
+        "step_1": {
+          "type": "step",
+          "settings": {
+            "icon": "search",
+            "title": "Elige tu producto",
+            "text": "Encuentra la herramienta ideal según tu molestia o tu rutina."
+          }
+        },
+        "step_2": {
+          "type": "step",
+          "settings": {
+            "icon": "cart",
+            "title": "Compra fácil y seguro",
+            "text": "Paga en línea o contraentrega, como prefieras."
+          }
+        },
+        "step_3": {
+          "type": "step",
+          "settings": {
+            "icon": "home",
+            "title": "Recíbelo y úsalo",
+            "text": "Empieza a sentir el cambio desde la primera semana."
+          }
+        }
+      },
+      "block_order": ["step_1", "step_2", "step_3"]
+    },
+    "social_proof": {
+      "type": "social-proof",
+      "settings": {
+        "heading": "Lo que dicen nuestros clientes"
+      },
+      "blocks": {}
+    }
+  },
+  "order": [
+    "hero",
+    "trust_bar",
+    "featured_product",
+    "how_it_works",
+    "social_proof"
+  ]
+}

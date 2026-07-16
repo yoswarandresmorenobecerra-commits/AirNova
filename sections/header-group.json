@@ -1,0 +1,11 @@
+{
+  "type": "header",
+  "name": "Grupo de encabezado",
+  "sections": {
+    "header": {
+      "type": "header",
+      "settings": {}
+    }
+  },
+  "order": ["header"]
+}

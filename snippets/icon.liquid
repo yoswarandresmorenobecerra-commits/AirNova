@@ -1,0 +1,42 @@
+{% comment %}
+  Renders a small inline SVG icon (no external requests / icon fonts).
+  Usage: {% render 'icon', name: 'shipping' %}
+{% endcomment %}
+{% liquid
+  assign icon_name = name | default: 'check'
+%}
+<svg class="icon icon--{{ icon_name }}" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  {% case icon_name %}
+    {% when 'shipping' %}
+      <rect x="1" y="6" width="14" height="10"></rect>
+      <path d="M15 10h4l3 3v3h-7z"></path>
+      <circle cx="6" cy="18" r="1.6"></circle>
+      <circle cx="18" cy="18" r="1.6"></circle>
+    {% when 'cod' %}
+      <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+      <path d="M2 9h20"></path>
+      <path d="M6 14h4"></path>
+    {% when 'guarantee' %}
+      <path d="M12 2l8 3.5v5C20 15.5 16.6 19.6 12 21c-4.6-1.4-8-5.5-8-10.5v-5z"></path>
+      <path d="M9 12l2 2 4-4"></path>
+    {% when 'returns' %}
+      <path d="M3 12a9 9 0 1 0 3-6.7"></path>
+      <path d="M3 3v5h5"></path>
+    {% when 'cart' %}
+      <path d="M2 3h2l2.4 12.4a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.6L21 8H6"></path>
+      <circle cx="9" cy="20" r="1.4"></circle>
+      <circle cx="18" cy="20" r="1.4"></circle>
+    {% when 'search' %}
+      <circle cx="11" cy="11" r="7"></circle>
+      <path d="M21 21l-4.3-4.3"></path>
+    {% when 'package' %}
+      <path d="M21 8l-9-5-9 5 9 5 9-5z"></path>
+      <path d="M3 8v8l9 5 9-5V8"></path>
+      <path d="M12 13v8"></path>
+    {% when 'home' %}
+      <path d="M3 11l9-7 9 7"></path>
+      <path d="M5 10v10h14V10"></path>
+    {% else %}
+      <path d="M20 6L9 17l-5-5"></path>
+  {% endcase %}
+</svg>

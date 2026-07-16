@@ -1,0 +1,26 @@
+<footer class="site-footer">
+  <p class="site-footer__copyright">
+    &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}
+  </p>
+</footer>
+
+{% style %}
+  .site-footer {
+    background: var(--color-primary-light);
+    padding: 1.5rem 1.25rem;
+    text-align: center;
+  }
+
+  .site-footer__copyright {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": []
+}
+{% endschema %}

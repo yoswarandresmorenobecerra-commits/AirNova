@@ -1,0 +1,153 @@
+<section class="how-it-works">
+  {%- if section.settings.heading != blank -%}
+    <h2 class="how-it-works__heading">{{ section.settings.heading }}</h2>
+  {%- endif -%}
+
+  <ol class="how-it-works__steps">
+    {%- for block in section.blocks -%}
+      <li class="how-it-works__step" {{ block.shopify_attributes }}>
+        <span class="how-it-works__number">{{ forloop.index }}</span>
+        <span class="how-it-works__icon">
+          {% render 'icon', name: block.settings.icon %}
+        </span>
+        <h3 class="how-it-works__step-title">{{ block.settings.title }}</h3>
+        <p class="how-it-works__step-text">{{ block.settings.text }}</p>
+      </li>
+    {%- endfor -%}
+  </ol>
+</section>
+
+{% style %}
+  .how-it-works {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 1.25rem;
+  }
+
+  .how-it-works__heading {
+    text-align: center;
+    color: var(--color-text);
+    margin: 0 0 1.5rem;
+    font-size: 1.4rem;
+  }
+
+  .how-it-works__steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .how-it-works__step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.4rem;
+  }
+
+  .how-it-works__number {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-action);
+    letter-spacing: 0.05em;
+  }
+
+  .how-it-works__icon {
+    color: var(--color-primary);
+    margin-bottom: 0.25rem;
+  }
+
+  .how-it-works__step-title {
+    margin: 0;
+    font-size: 1.05rem;
+    color: var(--color-text);
+  }
+
+  .how-it-works__step-text {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.45;
+    max-width: 26rem;
+  }
+
+  @media (min-width: 750px) {
+    .how-it-works__steps {
+      flex-direction: row;
+      align-items: flex-start;
+    }
+
+    .how-it-works__step {
+      flex: 1;
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "Cómo funciona",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "Cómo funciona"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Paso",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icono",
+          "options": [
+            { "value": "search", "label": "Buscar" },
+            { "value": "cart", "label": "Carrito" },
+            { "value": "package", "label": "Paquete" },
+            { "value": "home", "label": "Casa" }
+          ],
+          "default": "search"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título del paso",
+          "default": "Elige tu producto"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Descripción",
+          "default": "Encuentra la herramienta ideal según tu molestia o tu rutina."
+        }
+      ]
+    }
+  ],
+  "max_blocks": 3,
+  "presets": [
+    {
+      "name": "Cómo funciona",
+      "blocks": [
+        {
+          "type": "step",
+          "settings": { "icon": "search", "title": "Elige tu producto", "text": "Encuentra la herramienta ideal según tu molestia o tu rutina." }
+        },
+        {
+          "type": "step",
+          "settings": { "icon": "cart", "title": "Compra fácil y seguro", "text": "Paga en línea o contraentrega, como prefieras." }
+        },
+        {
+          "type": "step",
+          "settings": { "icon": "home", "title": "Recíbelo y úsalo", "text": "Empieza a sentir el cambio desde la primera semana." }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
