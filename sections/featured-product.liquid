@@ -1,5 +1,11 @@
 {%- liquid
   assign product = section.settings.product
+  assign loading_strategy = 'lazy'
+  assign fetch_priority = 'auto'
+  if section.settings.prioritize_image
+    assign loading_strategy = 'eager'
+    assign fetch_priority = 'high'
+  endif
 -%}
 
 {%- if product != blank -%}
@@ -9,9 +15,10 @@
     <div class="featured-product__media">
       {%- if product.featured_image != blank -%}
         {{ product.featured_image | image_url: width: 1200 | image_tag:
-          loading: 'lazy',
+          loading: loading_strategy,
+          fetchpriority: fetch_priority,
           widths: '400,600,900,1200',
-          sizes: '100vw',
+          sizes: '(min-width: 750px) 50vw, 100vw',
           alt: product.featured_image.alt | default: product.title,
           class: 'featured-product__image'
         }}
@@ -165,6 +172,13 @@
       "type": "product",
       "id": "product",
       "label": "Producto"
+    },
+    {
+      "type": "checkbox",
+      "id": "prioritize_image",
+      "label": "Esta sección aparece arriba del pliegue (primera pantalla)",
+      "info": "Actívalo solo si esta sección es de las primeras en la página, para cargar su imagen sin lazy loading y evitar que retrase el LCP.",
+      "default": false
     },
     {
       "type": "text",

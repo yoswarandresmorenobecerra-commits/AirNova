@@ -17,14 +17,17 @@
     {%- for image in product.images limit: 6 -%}
       {%- liquid
         assign loading_strategy = 'lazy'
+        assign fetch_priority = 'auto'
         if forloop.first
           assign loading_strategy = 'eager'
+          assign fetch_priority = 'high'
         endif
       -%}
       {{ image | image_url: width: 1200 | image_tag:
         loading: loading_strategy,
+        fetchpriority: fetch_priority,
         widths: '400,600,900,1200',
-        sizes: '100vw',
+        sizes: '(min-width: 750px) 50vw, 100vw',
         alt: image.alt | default: product.title,
         class: 'product__media-image'
       }}
@@ -280,6 +283,7 @@
 
   .product__option-select {
     width: 100%;
+    min-height: 44px;
     padding: 0.7rem 0.9rem;
     border-radius: 8px;
     border: 1px solid var(--color-border);
@@ -396,7 +400,7 @@
   }
 {% endstyle %}
 
-{% javascript %}
+<script type="module">
   (function () {
     document.querySelectorAll('[data-product-variants]').forEach(function (script) {
       var sectionId = script.id.replace('ProductVariantsJson-', '');
@@ -495,7 +499,7 @@
       }
     });
   })();
-{% endjavascript %}
+</script>
 
 {% schema %}
 {

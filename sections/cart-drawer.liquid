@@ -73,13 +73,17 @@
     color: var(--color-text);
   }
 
+  /* Área táctil mínima de 44px, aunque el icono visual sea más pequeño. */
   .cart-drawer__close {
     background: none;
     border: none;
     color: var(--color-text);
     cursor: pointer;
-    padding: 0.25rem;
+    min-width: 44px;
+    min-height: 44px;
     display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .cart-drawer__close .icon {

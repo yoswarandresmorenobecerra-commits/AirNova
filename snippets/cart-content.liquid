@@ -12,6 +12,8 @@
         <a href="{{ item.url }}" class="cart-item__media">
           {{ item.image | image_url: width: 200 | image_tag:
             loading: 'lazy',
+            widths: '72,144,216',
+            sizes: '72px',
             alt: item.image.alt | default: item.product.title,
             class: 'cart-item__image'
           }}

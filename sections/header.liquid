@@ -22,22 +22,30 @@
   }
 
   .site-header__logo {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
     font-weight: 700;
     font-size: 1.1rem;
     color: var(--color-primary);
     text-decoration: none;
   }
 
+  /* Área táctil mínima de 44px, aunque el icono visual sea más pequeño. */
   .site-header__cart {
     position: relative;
     color: var(--color-text);
     display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
   }
 
   .site-header__cart-count {
     position: absolute;
-    top: -0.4rem;
-    right: -0.5rem;
+    top: 0.3rem;
+    right: 0.3rem;
     background: var(--color-action);
     color: var(--color-action-text);
     font-size: 0.65rem;

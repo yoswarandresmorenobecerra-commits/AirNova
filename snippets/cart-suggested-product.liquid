@@ -35,6 +35,8 @@
       <a href="{{ suggested_product.url }}" class="cart-suggestion__media">
         {{ suggested_product.featured_image | image_url: width: 160 | image_tag:
           loading: 'lazy',
+          widths: '56,112,168',
+          sizes: '56px',
           alt: suggested_product.featured_image.alt | default: suggested_product.title,
           class: 'cart-suggestion__image'
         }}

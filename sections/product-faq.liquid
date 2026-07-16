@@ -41,15 +41,18 @@
   .product-faq__item {
     border: 1px solid var(--color-border);
     border-radius: 10px;
-    padding: 0.9rem 1.1rem;
+    padding: 0 1.1rem;
     background: var(--color-surface);
   }
 
+  /* Toda la fila del summary es el objetivo táctil: mínimo 44px de alto. */
   .product-faq__question {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 0.75rem;
+    min-height: 44px;
+    padding: 0.75rem 0;
     cursor: pointer;
     list-style: none;
     font-weight: 600;
@@ -76,7 +79,7 @@
   }
 
   .product-faq__answer {
-    margin-top: 0.75rem;
+    padding: 0 0 0.9rem;
     color: var(--color-text-secondary);
     font-size: 0.9rem;
     line-height: 1.55;
