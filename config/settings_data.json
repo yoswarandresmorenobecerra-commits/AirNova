@@ -1,0 +1,26 @@
+{
+  "current": "Default",
+  "presets": {
+    "Default": {
+      "color_primary": "#0E7C7B",
+      "color_primary_dark": "#0B6363",
+      "color_primary_light": "#E6F2F1",
+
+      "color_action": "#FF6A3D",
+      "color_action_hover": "#E85A2E",
+      "color_action_text": "#FFFFFF",
+
+      "color_urgency": "#E4483B",
+      "color_urgency_bg": "#FDECEA",
+      "color_urgency_text": "#FFFFFF",
+
+      "color_background": "#FFFFFF",
+      "color_surface": "#F7F8F8",
+      "color_surface_alt": "#F1F3F2",
+      "color_border": "#E3E7E6",
+
+      "color_text": "#1E2523",
+      "color_text_secondary": "#5B6664"
+    }
+  }
+}

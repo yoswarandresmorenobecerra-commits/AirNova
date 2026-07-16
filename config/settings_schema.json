@@ -1,0 +1,141 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "AirNova — Fitness & Wellness",
+    "theme_version": "1.0.0",
+    "theme_author": "AirNova",
+    "theme_documentation_url": "",
+    "theme_support_url": ""
+  },
+  {
+    "name": "Colores",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Marca (teal / verde azulado)"
+      },
+      {
+        "type": "paragraph",
+        "content": "Color de identidad: salud, calma y confianza. Úsalo en navegación, encabezados, enlaces y elementos decorativos de marca. Nunca en botones de acción."
+      },
+      {
+        "type": "color",
+        "id": "color_primary",
+        "label": "Primario de marca",
+        "default": "#0E7C7B"
+      },
+      {
+        "type": "color",
+        "id": "color_primary_dark",
+        "label": "Primario — hover / activo",
+        "default": "#0B6363"
+      },
+      {
+        "type": "color",
+        "id": "color_primary_light",
+        "label": "Primario — fondo suave / badges",
+        "default": "#E6F2F1"
+      },
+      {
+        "type": "header",
+        "content": "Acción (Añadir al carrito / Comprar ahora)"
+      },
+      {
+        "type": "paragraph",
+        "content": "Único color cálido saturado de toda la tienda. Resérvalo exclusivamente para los botones de conversión, así el ojo lo encuentra de inmediato sobre el fondo neutro."
+      },
+      {
+        "type": "color",
+        "id": "color_action",
+        "label": "Acción (CTA)",
+        "default": "#FF6A3D"
+      },
+      {
+        "type": "color",
+        "id": "color_action_hover",
+        "label": "Acción — hover",
+        "default": "#E85A2E"
+      },
+      {
+        "type": "color",
+        "id": "color_action_text",
+        "label": "Texto sobre color de acción",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "header",
+        "content": "Urgencia (envío gratis, ofertas reales, stock)"
+      },
+      {
+        "type": "paragraph",
+        "content": "Reservado ÚNICAMENTE para: banner de envío gratis, ofertas/descuentos reales y contador de stock real. Nunca en navegación ni en elementos decorativos — así se asocia siempre a 'actuar ahora'."
+      },
+      {
+        "type": "color",
+        "id": "color_urgency",
+        "label": "Urgencia",
+        "default": "#E4483B"
+      },
+      {
+        "type": "color",
+        "id": "color_urgency_bg",
+        "label": "Urgencia — fondo suave",
+        "default": "#FDECEA"
+      },
+      {
+        "type": "color",
+        "id": "color_urgency_text",
+        "label": "Texto sobre color de urgencia",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "header",
+        "content": "Fondo y superficies"
+      },
+      {
+        "type": "paragraph",
+        "content": "Blancos y grises muy claros con amplio espacio en blanco, para que el color de acción resalte al máximo."
+      },
+      {
+        "type": "color",
+        "id": "color_background",
+        "label": "Fondo principal",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "color",
+        "id": "color_surface",
+        "label": "Superficie (tarjetas, secciones)",
+        "default": "#F7F8F8"
+      },
+      {
+        "type": "color",
+        "id": "color_surface_alt",
+        "label": "Superficie alterna",
+        "default": "#F1F3F2"
+      },
+      {
+        "type": "color",
+        "id": "color_border",
+        "label": "Bordes",
+        "default": "#E3E7E6"
+      },
+      {
+        "type": "header",
+        "content": "Texto"
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "Texto principal",
+        "default": "#1E2523"
+      },
+      {
+        "type": "color",
+        "id": "color_text_secondary",
+        "label": "Texto secundario",
+        "default": "#5B6664"
+      }
+    ]
+  }
+]

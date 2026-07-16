@@ -1,0 +1,78 @@
+<div class="section" style="padding: 2rem; max-width: 480px; margin: 2rem auto;">
+
+  {% if section.settings.show_urgency_banner %}
+    <div class="banner--urgency" style="margin-bottom: 1.5rem; border-radius: 8px;">
+      {{ section.settings.urgency_text }}
+    </div>
+  {% endif %}
+
+  <h2 style="color: var(--color-text); margin-bottom: 0.25rem;">
+    {{ section.settings.product_title }}
+  </h2>
+
+  <span class="badge--urgency" style="margin-bottom: 1rem;">
+    {{ section.settings.stock_text }}
+  </span>
+
+  <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1.5rem;">
+    <!-- Botón primario: acción/conversión -->
+    <button type="submit" class="btn btn--primary btn--full">
+      {{ section.settings.primary_button_text }}
+    </button>
+
+    <!-- Botón secundario: acción de apoyo, color de marca -->
+    <button type="button" class="btn btn--secondary btn--full">
+      {{ section.settings.secondary_button_text }}
+    </button>
+  </div>
+
+</div>
+
+{% schema %}
+{
+  "name": "Ejemplo de botones",
+  "settings": [
+    {
+      "type": "text",
+      "id": "product_title",
+      "label": "Título de producto",
+      "default": "Rodillo de espuma para recuperación muscular"
+    },
+    {
+      "type": "text",
+      "id": "primary_button_text",
+      "label": "Texto botón primario (acción)",
+      "default": "Añadir al carrito"
+    },
+    {
+      "type": "text",
+      "id": "secondary_button_text",
+      "label": "Texto botón secundario",
+      "default": "Ver guía de uso"
+    },
+    {
+      "type": "text",
+      "id": "stock_text",
+      "label": "Texto de stock (urgencia)",
+      "default": "Quedan 4 unidades"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_urgency_banner",
+      "label": "Mostrar banner de urgencia",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "urgency_text",
+      "label": "Texto del banner de urgencia",
+      "default": "Envío gratis en pedidos superiores a $50 — hoy termina la oferta"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ejemplo de botones"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,25 @@
+{% comment %}
+  Traduce config/settings_data.json a custom properties CSS.
+  Se incluye envuelto en <style> desde layout/theme.liquid.
+{% endcomment %}
+:root {
+  --color-primary: {{ settings.color_primary }};
+  --color-primary-dark: {{ settings.color_primary_dark }};
+  --color-primary-light: {{ settings.color_primary_light }};
+
+  --color-action: {{ settings.color_action }};
+  --color-action-hover: {{ settings.color_action_hover }};
+  --color-action-text: {{ settings.color_action_text }};
+
+  --color-urgency: {{ settings.color_urgency }};
+  --color-urgency-bg: {{ settings.color_urgency_bg }};
+  --color-urgency-text: {{ settings.color_urgency_text }};
+
+  --color-background: {{ settings.color_background }};
+  --color-surface: {{ settings.color_surface }};
+  --color-surface-alt: {{ settings.color_surface_alt }};
+  --color-border: {{ settings.color_border }};
+
+  --color-text: {{ settings.color_text }};
+  --color-text-secondary: {{ settings.color_text_secondary }};
+}
