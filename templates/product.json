@@ -18,21 +18,21 @@
           "type": "faq",
           "settings": {
             "question": "¿Cómo sé qué talla elegir?",
-            "answer": "Revisa la guía de tallas en las fotos del producto. Si tu medida está entre dos tallas, te recomendamos elegir la más grande para mayor comodidad de ajuste."
+            "answer": "[PENDIENTE: agregar guía de tallas real de este producto]"
           }
         },
         "fit": {
           "type": "faq",
           "settings": {
             "question": "¿Cómo se ajusta al cuerpo?",
-            "answer": "Cuenta con un ajuste regulable pensado para adaptarse a distintos tipos de cuerpo sin quedar ni muy suelto ni muy apretado."
+            "answer": "[PENDIENTE: describir el ajuste real de este producto]"
           }
         },
         "care": {
           "type": "faq",
           "settings": {
             "question": "¿Cómo cuido el material?",
-            "answer": "Límpialo con un paño húmedo y jabón neutro. Evita lavadora, secadora y la exposición directa y prolongada al sol para conservar el material."
+            "answer": "[PENDIENTE: agregar instrucciones reales de cuidado de este material]"
           }
         }
       },

@@ -1,0 +1,126 @@
+<section class="guarantee-banner">
+  <div class="guarantee-banner__card">
+    <span class="guarantee-banner__icon">
+      {% render 'icon', name: section.settings.icon %}
+    </span>
+
+    <div class="guarantee-banner__copy">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="guarantee-banner__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <p class="guarantee-banner__text">{{ section.settings.text }}</p>
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.button_label != blank -%}
+      <a href="{{ section.settings.button_link | default: '#' }}" class="btn btn--secondary guarantee-banner__button">
+        {{ section.settings.button_label }}
+      </a>
+    {%- endif -%}
+  </div>
+</section>
+
+{% style %}
+  .guarantee-banner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1.5rem 1.25rem;
+  }
+
+  .guarantee-banner__card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.75rem;
+    background: var(--color-primary-light);
+    border-radius: 12px;
+    padding: 1.75rem 1.25rem;
+  }
+
+  .guarantee-banner__icon {
+    color: var(--color-primary-dark);
+  }
+
+  .guarantee-banner__heading {
+    margin: 0 0 0.35rem;
+    font-size: 1.15rem;
+    color: var(--color-text);
+  }
+
+  .guarantee-banner__text {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    max-width: 40rem;
+  }
+
+  .guarantee-banner__button {
+    margin-top: 0.5rem;
+  }
+
+  @media (min-width: 750px) {
+    .guarantee-banner__card {
+      flex-direction: row;
+      text-align: left;
+      gap: 1.5rem;
+      padding: 2rem 2.5rem;
+    }
+
+    .guarantee-banner__button {
+      margin-top: 0;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "Banner de garantía",
+  "settings": [
+    {
+      "type": "select",
+      "id": "icon",
+      "label": "Icono",
+      "options": [
+        { "value": "guarantee", "label": "Garantía" },
+        { "value": "returns", "label": "Devoluciones" },
+        { "value": "shipping", "label": "Envío" },
+        { "value": "cod", "label": "Pago contraentrega" }
+      ],
+      "default": "guarantee"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "Compra con confianza"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Texto",
+      "default": "Garantía de 30 días por defecto de fábrica. Si algo sale mal, lo resolvemos."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Texto del botón (opcional)",
+      "default": ""
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Enlace del botón (opcional)"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Banner de garantía"
+    }
+  ]
+}
+{% endschema %}
