@@ -37,6 +37,33 @@
         padding-bottom: {{ section.settings.padding_bottom }}px;
       }
     }
+
+    .product-benefit-list {
+      list-style: none;
+      margin: 0 0 1.5rem;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .product-benefit-list__item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+
+    .product-benefit-list__icon {
+      flex-shrink: 0;
+      width: 1.6rem;
+      height: 1.6rem;
+      color: rgb(var(--color-foreground));
+    }
+
+    .product-benefit-list__icon svg {
+      width: 100%;
+      height: 100%;
+    }
   {%- endstyle -%}
 
   <script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
@@ -106,6 +133,20 @@
                       </h2>
                     </a>
                   </div>
+                {%- when 'benefit_list' -%}
+                  {%- assign benefit_bullets = product.metafields.custom.benefit_bullets.value -%}
+                  {%- if benefit_bullets.size > 0 -%}
+                    <ul class="product-benefit-list" {{ block.shopify_attributes }}>
+                      {%- for bullet in benefit_bullets limit: 4 -%}
+                        <li class="product-benefit-list__item">
+                          <span class="svg-wrapper product-benefit-list__icon">
+                            {{- 'icon-checkmark.svg' | inline_asset_content -}}
+                          </span>
+                          <span>{{ bullet }}</span>
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  {%- endif -%}
                 {%- when 'price' -%}
                   <div id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
                     {%- render 'price',
@@ -753,6 +794,101 @@
   </product-component>
 </product-info>
 
+{%- comment -%}
+  Barra de compra fija (sticky) en mobile. Vive fuera de <product-info> a
+  propósito, para que el swap de Ajax al cambiar de variante no la destruya:
+  en vez de eso, escucha el mismo evento pub/sub que usa Dawn
+  (PUB_SUB_EVENTS.variantChange) y copia el precio/estado ya renderizados
+  por el propio tema, sin reimplementar el formateo de moneda ni la
+  disponibilidad por su cuenta.
+{%- endcomment -%}
+<div class="product-sticky-bar" id="StickyBar-{{ section.id }}" data-sticky-bar data-section-id="{{ section.id }}">
+  <div class="product-sticky-bar__info">
+    <span class="product-sticky-bar__title">{{ product.title | escape }}</span>
+    <span class="product-sticky-bar__price" id="StickyPrice-{{ section.id }}">
+      {%- render 'price', product: product, use_variant: true -%}
+    </span>
+  </div>
+  <button
+    type="submit"
+    name="add"
+    form="{{ product_form_id }}"
+    class="product-sticky-bar__button button button--primary"
+    id="StickySubmit-{{ section.id }}"
+    {% if product.selected_or_first_available_variant.available == false or product.selected_or_first_available_variant == null %}
+      disabled
+    {% endif %}
+  >
+    <span id="StickySubmitText-{{ section.id }}">
+      {%- if product.selected_or_first_available_variant.available == false or product.selected_or_first_available_variant == null -%}
+        {{ 'products.product.sold_out' | t }}
+      {%- else -%}
+        {{ 'products.product.add_to_cart' | t }}
+      {%- endif -%}
+    </span>
+  </button>
+</div>
+<script src="{{ 'sticky-product-bar.js' | asset_url }}" defer="defer"></script>
+
+{% style %}
+  .product-sticky-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: rgb(var(--color-background));
+    border-top: 0.1rem solid rgba(var(--color-foreground), 0.2);
+    padding: 0.75rem 1.5rem calc(0.75rem + env(safe-area-inset-bottom));
+    transform: translateY(100%);
+    transition: transform 0.2s ease;
+    box-shadow: 0 -0.4rem 1rem rgba(0, 0, 0, 0.08);
+  }
+
+  .product-sticky-bar.product-sticky-bar--visible {
+    transform: translateY(0);
+  }
+
+  .product-sticky-bar__info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .product-sticky-bar__title {
+    font-size: 1.2rem;
+    color: rgba(var(--color-foreground), 0.75);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .product-sticky-bar__price .price {
+    margin: 0;
+    font-size: 1.4rem;
+  }
+
+  .product-sticky-bar__price .badge {
+    display: none;
+  }
+
+  .product-sticky-bar__button {
+    flex-shrink: 0;
+    width: auto;
+    min-width: 16rem;
+  }
+
+  @media screen and (min-width: 750px) {
+    .product-sticky-bar {
+      display: none;
+    }
+  }
+{% endstyle %}
+
 {% schema %}
 {
   "name": "t:sections.main-product.name",
@@ -798,6 +934,17 @@
       "type": "title",
       "name": "t:sections.main-product.blocks.title.name",
       "limit": 1
+    },
+    {
+      "type": "benefit_list",
+      "name": "Beneficios (bullets)",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Muestra hasta 4 bullets de beneficio reales de este producto, cada uno con un check. El contenido viene del metafield de producto custom.benefit_bullets (tipo: lista de texto de una línea). Si el metafield está vacío para este producto, el bloque no muestra nada — nunca se inventan beneficios."
+        }
+      ]
     },
     {
       "type": "price",

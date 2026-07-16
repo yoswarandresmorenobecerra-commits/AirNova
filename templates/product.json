@@ -3,15 +3,14 @@
     "main": {
       "type": "main-product",
       "blocks": {
-        "vendor": {
-          "type": "text",
-          "settings": {
-            "text": "{{ product.vendor }}",
-            "text_style": "uppercase"
-          }
-        },
         "title": {
           "type": "title"
+        },
+        "rating": {
+          "type": "rating"
+        },
+        "benefit_list": {
+          "type": "benefit_list"
         },
         "price": {
           "type": "price"
@@ -33,6 +32,18 @@
             "show_gift_card_recipient": true
           }
         },
+        "trust_bar": {
+          "type": "icon-with-text",
+          "settings": {
+            "layout": "horizontal",
+            "heading_1": "Envío en 24-48h",
+            "icon_1": "truck",
+            "heading_2": "Garantía de 30 días",
+            "icon_2": "check_mark",
+            "heading_3": "Pago 100% seguro",
+            "icon_3": "lock"
+          }
+        },
         "description": {
           "type": "description"
         },
@@ -44,12 +55,14 @@
         }
       },
       "block_order": [
-        "vendor",
         "title",
+        "rating",
+        "benefit_list",
         "price",
         "variant_picker",
         "quantity_selector",
         "buy_buttons",
+        "trust_bar",
         "description",
         "share"
       ],
