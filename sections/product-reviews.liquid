@@ -1,0 +1,73 @@
+{%- comment -%}
+  Bloque estructural para reseñas de clientes reales.
+
+  No se genera contenido de ejemplo aquí a propósito. Para conectar una
+  app de reviews más adelante hay dos caminos, según cómo trabaje la app
+  elegida:
+
+  1. App blocks (recomendado, apps modernas tipo Judge.me/Loox/Yotpo):
+     una vez instalada la app, entra al editor de temas → esta sección
+     → "Añadir bloque" → el bloque de la app aparecerá listado bajo
+     "Apps" gracias al tipo "@app" declarado en el schema. No requiere
+     tocar este archivo.
+
+  2. Snippet manual (apps más antiguas que piden pegar código):
+     descomenta la línea de abajo y reemplázala por el snippet que
+     indique la documentación de la app instalada.
+
+     {% render 'nombre-snippet-de-la-app', product: product %}
+{%- endcomment -%}
+
+<section class="product-reviews">
+  {%- if section.settings.heading != blank -%}
+    <h2 class="product-reviews__heading">{{ section.settings.heading }}</h2>
+  {%- endif -%}
+
+  <div class="product-reviews__app-slot">
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when '@app' -%}
+          {% render block %}
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+</section>
+
+{% style %}
+  .product-reviews {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1.25rem;
+  }
+
+  .product-reviews__heading {
+    text-align: center;
+    color: var(--color-text);
+    margin: 0 0 1.25rem;
+    font-size: 1.4rem;
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "Reseñas de clientes",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "Reseñas de clientes"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Reseñas de clientes"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,50 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {
+        "button_label": "Añadir al carrito",
+        "shipping_guarantee_text": "Envío en 24-48h · Garantía de 30 días por defecto de fábrica",
+        "low_stock_threshold": 10
+      }
+    },
+    "product_faq": {
+      "type": "product-faq",
+      "settings": {
+        "heading": "Preguntas frecuentes"
+      },
+      "blocks": {
+        "size": {
+          "type": "faq",
+          "settings": {
+            "question": "¿Cómo sé qué talla elegir?",
+            "answer": "Revisa la guía de tallas en las fotos del producto. Si tu medida está entre dos tallas, te recomendamos elegir la más grande para mayor comodidad de ajuste."
+          }
+        },
+        "fit": {
+          "type": "faq",
+          "settings": {
+            "question": "¿Cómo se ajusta al cuerpo?",
+            "answer": "Cuenta con un ajuste regulable pensado para adaptarse a distintos tipos de cuerpo sin quedar ni muy suelto ni muy apretado."
+          }
+        },
+        "care": {
+          "type": "faq",
+          "settings": {
+            "question": "¿Cómo cuido el material?",
+            "answer": "Límpialo con un paño húmedo y jabón neutro. Evita lavadora, secadora y la exposición directa y prolongada al sol para conservar el material."
+          }
+        }
+      },
+      "block_order": ["size", "fit", "care"]
+    },
+    "product_reviews": {
+      "type": "product-reviews",
+      "settings": {
+        "heading": "Reseñas de clientes"
+      },
+      "blocks": {}
+    }
+  },
+  "order": ["main", "product_faq", "product_reviews"]
+}

@@ -1,0 +1,528 @@
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign low_stock_threshold = section.settings.low_stock_threshold
+
+  assign benefit_sentence = product.metafields.custom.benefit_sentence.value
+  if benefit_sentence == blank
+    assign benefit_sentence = product.description | strip_html | truncatewords: 18
+  endif
+
+  assign bullets = product.metafields.custom.benefit_bullets.value
+-%}
+
+<section class="product" id="Product-{{ section.id }}">
+
+  {%- comment -%} ---------- Galería ---------- {%- endcomment -%}
+  <div class="product__media">
+    {%- for image in product.images limit: 6 -%}
+      {%- liquid
+        assign loading_strategy = 'lazy'
+        if forloop.first
+          assign loading_strategy = 'eager'
+        endif
+      -%}
+      {{ image | image_url: width: 1200 | image_tag:
+        loading: loading_strategy,
+        widths: '400,600,900,1200',
+        sizes: '100vw',
+        alt: image.alt | default: product.title,
+        class: 'product__media-image'
+      }}
+    {%- endfor -%}
+  </div>
+
+  <div class="product__info">
+
+    {%- comment -%} 1. Título + una frase de beneficio (no ficha técnica) {%- endcomment -%}
+    <h1 class="product__title">{{ product.title }}</h1>
+    {%- if benefit_sentence != blank -%}
+      <p class="product__benefit">{{ benefit_sentence }}</p>
+    {%- endif -%}
+
+    {%- comment -%} 2. Precio grande + comparativo tachado solo si es un descuento real {%- endcomment -%}
+    <div class="product__price" id="ProductPrice-{{ section.id }}">
+      <span class="product__price-current" data-product-price>
+        {{ current_variant.price | money }}
+      </span>
+      <s class="product__price-compare" data-product-compare-price {% if current_variant.compare_at_price <= current_variant.price %}hidden{% endif %}>
+        {{ current_variant.compare_at_price | money }}
+      </s>
+      {%- assign has_discount = false -%}
+      {%- if current_variant.compare_at_price > current_variant.price -%}
+        {%- assign has_discount = true -%}
+        {%- assign discount_percent = current_variant.compare_at_price | minus: current_variant.price | times: 100 | divided_by: current_variant.compare_at_price -%}
+      {%- endif -%}
+      <span class="badge--urgency product__discount-badge" data-product-discount-badge {% unless has_discount %}hidden{% endunless %}>
+        -{{ discount_percent }}%
+      </span>
+    </div>
+
+    {%- comment -%} 3. Bullets de beneficio (objeción/deseo), no características técnicas {%- endcomment -%}
+    {%- if bullets.size > 0 -%}
+      <ul class="product__bullets">
+        {%- for bullet in bullets limit: 4 -%}
+          <li class="product__bullet">
+            {% render 'icon', name: 'check' %}
+            <span>{{ bullet }}</span>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+
+    {%- form 'product', product, id: 'ProductForm-' | append: section.id, class: 'product__form' -%}
+      <input type="hidden" name="id" id="ProductVariantId-{{ section.id }}" value="{{ current_variant.id }}">
+
+      {%- comment -%} Selector de variantes (talla / color / etc.) {%- endcomment -%}
+      {%- if product.has_only_default_variant == false -%}
+        <div class="product__options" data-product-options>
+          {%- for option in product.options_with_values -%}
+            <div class="product__option">
+              <label class="product__option-label" for="ProductOption-{{ section.id }}-{{ option.position }}">
+                {{ option.name }}
+              </label>
+              <select
+                class="product__option-select"
+                id="ProductOption-{{ section.id }}-{{ option.position }}"
+                data-option-position="{{ option.position }}"
+              >
+                {%- for value in option.values -%}
+                  <option value="{{ value | escape }}" {% if option.selected_value == value %}selected{% endif %}>
+                    {{ value }}
+                  </option>
+                {%- endfor -%}
+              </select>
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+      {%- comment -%} 6. Stock real vía Liquid — nunca un número si el stock es alto {%- endcomment -%}
+      <div class="product__stock" id="ProductStock-{{ section.id }}" data-low-stock-threshold="{{ low_stock_threshold }}">
+        {%- if current_variant.available == false -%}
+          <span class="badge--unavailable">Agotado</span>
+        {%- elsif current_variant.inventory_management == 'shopify' and current_variant.inventory_quantity <= low_stock_threshold -%}
+          <span class="badge--urgency">Quedan {{ current_variant.inventory_quantity }} unidades</span>
+        {%- else -%}
+          <span class="badge--available">Disponible</span>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} 4. Botón de acción — se duplica en la barra sticky {%- endcomment -%}
+      <button
+        type="submit"
+        name="add"
+        class="btn btn--primary btn--full product__submit"
+        id="ProductSubmit-{{ section.id }}"
+        {% unless current_variant.available %}disabled{% endunless %}
+      >
+        <span data-add-to-cart-text data-label="{{ section.settings.button_label | default: 'Añadir al carrito' }}">
+          {%- if current_variant.available -%}
+            {{ section.settings.button_label | default: 'Añadir al carrito' }}
+          {%- else -%}
+            Agotado
+          {%- endif -%}
+        </span>
+      </button>
+
+      {%- comment -%} 5. Envío / garantía, texto pequeño bajo el botón {%- endcomment -%}
+      {%- if section.settings.shipping_guarantee_text != blank -%}
+        <p class="product__microcopy">{{ section.settings.shipping_guarantee_text }}</p>
+      {%- endif -%}
+    {%- endform -%}
+  </div>
+</section>
+
+{%- comment -%} Barra de compra sticky — visible sobre todo en mobile mientras se hace scroll {%- endcomment -%}
+<div class="sticky-buy-bar" id="StickyBuyBar-{{ section.id }}" data-sticky-buy-bar>
+  <div class="sticky-buy-bar__info">
+    <span class="sticky-buy-bar__title">{{ product.title }}</span>
+    <span class="sticky-buy-bar__price" data-sticky-price>{{ current_variant.price | money }}</span>
+  </div>
+  <button
+    type="submit"
+    form="ProductForm-{{ section.id }}"
+    class="btn btn--primary sticky-buy-bar__button"
+    id="StickySubmit-{{ section.id }}"
+    {% unless current_variant.available %}disabled{% endunless %}
+  >
+    <span data-sticky-add-to-cart-text data-label="{{ section.settings.button_label | default: 'Añadir al carrito' }}">
+      {%- if current_variant.available -%}
+        {{ section.settings.button_label | default: 'Añadir al carrito' }}
+      {%- else -%}
+        Agotado
+      {%- endif -%}
+    </span>
+  </button>
+</div>
+
+{%- comment -%} Datos reales de variantes para el selector — nada de precios/stock inventados en JS {%- endcomment -%}
+<script type="application/json" data-product-variants id="ProductVariantsJson-{{ section.id }}">
+[
+  {%- for variant in product.variants -%}
+    {
+      "id": {{ variant.id | json }},
+      "available": {{ variant.available | json }},
+      "price": {{ variant.price | money | json }},
+      "price_cents": {{ variant.price | json }},
+      "compare_at_price": {% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | money | json }}{% else %}null{% endif %},
+      "compare_at_price_cents": {% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | json }}{% else %}null{% endif %},
+      "inventory_management": {{ variant.inventory_management | json }},
+      "inventory_quantity": {{ variant.inventory_quantity | json }},
+      "options": {{ variant.options | json }}
+    }{% unless forloop.last %},{% endunless %}
+  {%- endfor -%}
+]
+</script>
+
+{% style %}
+  .product {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .product__media {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .product__media-image {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    display: block;
+    background: var(--color-surface-alt);
+  }
+
+  .product__info {
+    padding: 1.25rem 1.25rem 6.5rem;
+  }
+
+  .product__title {
+    margin: 0 0 0.4rem;
+    font-size: 1.5rem;
+    line-height: 1.25;
+    color: var(--color-text);
+  }
+
+  .product__benefit {
+    margin: 0 0 1rem;
+    color: var(--color-text-secondary);
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .product__price {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin: 0 0 1rem;
+  }
+
+  .product__price-current {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .product__price-compare {
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: var(--color-text-secondary);
+  }
+
+  .product__price-compare[hidden],
+  .product__discount-badge[hidden] {
+    display: none;
+  }
+
+  .product__bullets {
+    list-style: none;
+    margin: 0 0 1.25rem;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .product__bullet {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    color: var(--color-text);
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+
+  .product__bullet .icon {
+    color: var(--color-primary);
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+    width: 20px;
+    height: 20px;
+  }
+
+  .product__options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .product__option-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 0.3rem;
+  }
+
+  .product__option-select {
+    width: 100%;
+    padding: 0.7rem 0.9rem;
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+    background: var(--color-background);
+    color: var(--color-text);
+    font-size: 1rem;
+  }
+
+  .product__stock {
+    margin-bottom: 1rem;
+  }
+
+  .product__form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .product__submit {
+    order: 10;
+  }
+
+  .product__microcopy {
+    order: 11;
+    margin: 0.6rem 0 0;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+  }
+
+  /* ---------- Barra sticky de compra ---------- */
+
+  .sticky-buy-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--color-background);
+    border-top: 1px solid var(--color-border);
+    padding: 0.6rem 1rem calc(0.6rem + env(safe-area-inset-bottom));
+    transform: translateY(100%);
+    transition: transform 0.2s ease;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.06);
+  }
+
+  .sticky-buy-bar.is-visible {
+    transform: translateY(0);
+  }
+
+  .sticky-buy-bar__info {
+    display: none;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .sticky-buy-bar__title {
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .sticky-buy-bar__price {
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .sticky-buy-bar__button {
+    flex: 1;
+  }
+
+  @media (min-width: 500px) {
+    .sticky-buy-bar__info {
+      display: flex;
+    }
+
+    .sticky-buy-bar__button {
+      flex: none;
+      min-width: 220px;
+    }
+  }
+
+  @media (min-width: 750px) {
+    .product {
+      flex-direction: row;
+      align-items: flex-start;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+      gap: 2.5rem;
+    }
+
+    .product__media,
+    .product__info {
+      flex: 1 1 50%;
+      padding: 0;
+    }
+
+    .product__title {
+      font-size: 2rem;
+    }
+
+    .product__price-current {
+      font-size: 2.5rem;
+    }
+
+    /* En desktop el botón principal ya está siempre visible sin scroll largo,
+       pero la barra sticky se mantiene como respaldo si la página es larga. */
+  }
+{% endstyle %}
+
+{% javascript %}
+  (function () {
+    document.querySelectorAll('[data-product-variants]').forEach(function (script) {
+      var sectionId = script.id.replace('ProductVariantsJson-', '');
+      var root = document.getElementById('Product-' + sectionId);
+      if (!root) return;
+
+      var variants = JSON.parse(script.textContent);
+      var optionSelects = root.querySelectorAll('[data-option-position]');
+      var priceEl = root.querySelector('[data-product-price]');
+      var comparePriceEl = root.querySelector('[data-product-compare-price]');
+      var discountBadgeEl = root.querySelector('[data-product-discount-badge]');
+      var stockEl = document.getElementById('ProductStock-' + sectionId);
+      var lowStockThreshold = parseInt(stockEl.dataset.lowStockThreshold, 10) || 10;
+      var variantIdInput = document.getElementById('ProductVariantId-' + sectionId);
+      var submitBtn = document.getElementById('ProductSubmit-' + sectionId);
+      var submitText = submitBtn ? submitBtn.querySelector('[data-add-to-cart-text]') : null;
+      var stickyBar = document.getElementById('StickyBuyBar-' + sectionId);
+      var stickyPriceEl = stickyBar ? stickyBar.querySelector('[data-sticky-price]') : null;
+      var stickySubmit = document.getElementById('StickySubmit-' + sectionId);
+      var stickySubmitText = stickySubmit ? stickySubmit.querySelector('[data-sticky-add-to-cart-text]') : null;
+
+      function findVariant() {
+        var selected = [];
+        optionSelects.forEach(function (select) {
+          var position = parseInt(select.dataset.optionPosition, 10);
+          selected[position - 1] = select.value;
+        });
+        return variants.filter(function (variant) {
+          return selected.every(function (value, index) {
+            return value === undefined || variant.options[index] === value;
+          });
+        })[0];
+      }
+
+      function renderStock(variant) {
+        if (!variant.available) {
+          stockEl.innerHTML = '<span class="badge--unavailable">Agotado</span>';
+        } else if (variant.inventory_management === 'shopify' && variant.inventory_quantity <= lowStockThreshold) {
+          stockEl.innerHTML = '<span class="badge--urgency">Quedan ' + variant.inventory_quantity + ' unidades</span>';
+        } else {
+          stockEl.innerHTML = '<span class="badge--available">Disponible</span>';
+        }
+      }
+
+      function updateUI(variant) {
+        if (!variant) return;
+
+        if (variantIdInput) variantIdInput.value = variant.id;
+        if (priceEl) priceEl.textContent = variant.price;
+        if (stickyPriceEl) stickyPriceEl.textContent = variant.price;
+
+        if (variant.compare_at_price) {
+          if (comparePriceEl) {
+            comparePriceEl.textContent = variant.compare_at_price;
+            comparePriceEl.hidden = false;
+          }
+          if (discountBadgeEl) {
+            var pct = Math.round(
+              ((variant.compare_at_price_cents - variant.price_cents) / variant.compare_at_price_cents) * 100
+            );
+            discountBadgeEl.textContent = '-' + pct + '%';
+            discountBadgeEl.hidden = false;
+          }
+        } else {
+          if (comparePriceEl) comparePriceEl.hidden = true;
+          if (discountBadgeEl) discountBadgeEl.hidden = true;
+        }
+
+        renderStock(variant);
+
+        [submitBtn, stickySubmit].forEach(function (btn) {
+          if (!btn) return;
+          btn.disabled = !variant.available;
+        });
+        if (submitText) submitText.textContent = variant.available ? submitText.dataset.label || submitText.textContent : 'Agotado';
+        if (stickySubmitText) stickySubmitText.textContent = variant.available ? stickySubmitText.dataset.label || stickySubmitText.textContent : 'Agotado';
+      }
+
+      optionSelects.forEach(function (select) {
+        select.addEventListener('change', function () {
+          updateUI(findVariant());
+        });
+      });
+
+      // Barra sticky: visible solo cuando el botón principal sale de vista.
+      if (submitBtn && stickyBar && 'IntersectionObserver' in window) {
+        var observer = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              stickyBar.classList.toggle('is-visible', !entry.isIntersecting);
+            });
+          },
+          { threshold: 0 }
+        );
+        observer.observe(submitBtn);
+      }
+    });
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Producto principal",
+  "settings": [
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Texto del botón de acción",
+      "default": "Añadir al carrito"
+    },
+    {
+      "type": "text",
+      "id": "shipping_guarantee_text",
+      "label": "Mensaje de envío/garantía",
+      "default": "Envío en 24-48h · Garantía de 30 días por defecto de fábrica"
+    },
+    {
+      "type": "range",
+      "id": "low_stock_threshold",
+      "label": "Umbral de stock bajo",
+      "info": "El aviso de pocas unidades solo aparece si el inventario real de Shopify está por debajo de este número. Con stock alto se muestra solo 'Disponible', sin cifra exacta.",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "default": 10
+    }
+  ]
+}
+{% endschema %}
